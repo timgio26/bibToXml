@@ -1,0 +1,19 @@
+services:
+  backend:
+    image: bibtoxml-be
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+  frontend:
+    image: bibtoxml-fe
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+    

@@ -2,34 +2,50 @@ import { useState } from "react";
 import "./App.css";
 import { useGetXml } from "./MyQuery";
 
-
-
 function App() {
   const [url, setUrl] = useState<string>("");
 
-  const {getXml} = useGetXml()
+  const { getXml, isPending } = useGetXml();
 
-  function handleGetXml(){
-    getXml(url)
+  function handleGetXml() {
+    if (url.includes("https://scholar.googleusercontent.com/citations")) {
+      getXml(url);
+    }
   }
-  
+
   return (
-    <div className="flex flex-col gap-3 px-1.5">
-      <div className="flex flex-col items-center">
-        <span className="text-2xl">BibTeX to XML</span>
-        <span>Because we write in MS Word, and it only able to import XML</span>
+    <div className="flex flex-col items-center gap-6 px-4 py-8 bg-gradient-to-br from-white to-gray-100 rounded-xl shadow-lg max-w-3xl mx-auto">
+      {/* Header */}
+      <div className="text-center">
+        <h1 className="text-3xl font-bold text-gray-800 mb-2">
+          BibTeX to XML Converter
+        </h1>
+        <p className="text-gray-600 text-sm">
+          Because we write in MS Word — and it only imports XML.
+        </p>
       </div>
-      <div className="flex flex-col items-center gap-2">
+
+      {/* Input + Button */}
+      <div className="w-full flex flex-col items-center gap-4">
         <textarea
           name="urlinput"
           id="urlinput"
-          className="border w-full md:w-1/2 p-1"
-          placeholder="Paste BibTeX URL from Google Schoolar"
+          className="w-full md:w-2/3 h-32 p-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 resize-none"
+          placeholder="Paste BibTeX URL from Google Scholar"
           value={url}
-          onChange={(e)=>setUrl(e.target.value)}
+          onChange={(e) => setUrl(e.target.value)}
         />
-        <button className="border bg-green-300 px-3 rounded cursor-pointer" onClick={handleGetXml}>
-          generate xml
+
+        <button
+          onClick={handleGetXml}
+          disabled={isPending}
+          className={`px-6 py-2 rounded-lg font-semibold transition-all duration-300 ${
+            isPending||!url
+              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+              : "bg-green-500 hover:bg-green-600 text-white shadow-md"
+          }`}
+        >
+          {isPending ? "Generating XML..." : "Generate XML"}
         </button>
       </div>
     </div>

@@ -1,4 +1,4 @@
-from flask import Flask, Response,request
+from flask import Flask, Response,request,jsonify
 import requests
 import bibtexparser
 import xml.etree.ElementTree as ET
@@ -48,9 +48,11 @@ def hello():
     bib_database = bibtexparser.loads(resp.text)
     root = ET.Element("b:Sources",attrib={"xmlns:b": "http://schemas.openxmlformats.org/officeDocument/2006/bibliography",
                                           "xmlns":"http://schemas.openxmlformats.org/officeDocument/2006/bibliography"})
+    if(len(bib_database.entries)<1):
+        return jsonify({"error": f"data length {len(bib_database.entries)}",
+                        "raw":resp.text}),400
     for entry in bib_database.entries:
         parsed = BibTexSchema(**entry)
-        print(parsed)
         record = ET.SubElement(root, "b:Source")
         ET.SubElement(record,"b:SourceType").text = SourceTypeDict.get(parsed.ENTRYTYPE) 
         ET.SubElement(record,"b:Title").text = parsed.title
