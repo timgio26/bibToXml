@@ -1,0 +1,19 @@
+# Exported from Render on 2025-10-17T23:03:35Z
+version: "1"
+services:
+- type: web
+  name: bibtoxmlbe
+  runtime: image
+  image:
+    url: docker.io/timotiusgiovandi/bibtoxml-be:latest
+  plan: free
+  region: oregon
+  autoDeployTrigger: commit
+- type: web
+  name: bibtoxmlfe
+  runtime: image
+  image:
+    url: docker.io/timotiusgiovandi/bibtoxml-fe:latest
+  plan: free
+  region: oregon
+  autoDeployTrigger: commit

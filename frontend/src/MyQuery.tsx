@@ -2,12 +2,19 @@ import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 import toast from "react-hot-toast";
 
+interface UseGetXmlProp {
+  source:string
+  mode:"url"|"text"
+}
 export function useGetXml(){
   const {mutate:getXml,isPending} = useMutation({
-    mutationFn:async(url:string)=>{
-      const resp = await axios.post("api/getxml",{url},{responseType:"blob"})
-      
-      // Extract filename from headers
+    mutationFn:async({source,mode}:UseGetXmlProp)=>{
+      let resp
+      if (mode=="url"){
+        resp = await axios.post("api/getxmlfromurl",{bibtexurl:source},{responseType:"blob"})
+      }else{
+        resp = await axios.post("api/getxmlfrombibtex",{bibtex:source},{responseType:"blob"})
+      }
       const disposition = resp.headers['content-disposition'];
       const match = disposition?.match(/filename="?(.+)"?/);
       const filename = match?.[1] || 'download.xml';

@@ -1,13 +1,13 @@
 services:
   backend:
-    image: bibtoxml-be
+    image: timotiusgiovandi/bibtoxml-be
     build:
       context: backend
       dockerfile: Dockerfile
     ports:
       - "5000:5000"
   frontend:
-    image: bibtoxml-fe
+    image: timotiusgiovandi/bibtoxml-fe
     build:
       context: frontend
       dockerfile: Dockerfile
